@@ -1,0 +1,10 @@
+README.md
+setup.py
+foxyNN/__init__.py
+foxyNN/lossfuncs.py
+foxyNN/tools.py
+foxyNN.egg-info/PKG-INFO
+foxyNN.egg-info/SOURCES.txt
+foxyNN.egg-info/dependency_links.txt
+foxyNN.egg-info/requires.txt
+foxyNN.egg-info/top_level.txt
