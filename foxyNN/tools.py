@@ -45,6 +45,7 @@ def t_env(settings=None):
                     if agent_type not in self.optimizers.keys():
                         optimizer = optim.Adam(policy.parameters(), lr=self.t_settings['lr'])
                         self.optimizers.update({agent_type:optimizer}) 
+                    
             def train(self):
                 """
                 Initialize the model and trains the policies by running the episodes for the given number of types, i.e. t_settings['episodes'].
@@ -72,24 +73,24 @@ def t_env(settings=None):
                 saved_rewards = {}
                 saved_actions = {}
                 episode_reward = {}
-                
-                
-                for agent in self.agents: # get rewards and saved actions from agents
-                    if agent.__name__ not in saved_rewards.keys():
-                        saved_rewards.update({agent.__name__:[*agent.saved_rewards]})
-                    else:
-                        saved_rewards[agent.__name__].append(*agent.saved_rewards)
 
-                    if agent.__name__ not in saved_actions.keys():
-                        saved_actions.update({agent.__name__:agent.saved_actions})
-                    else:
-                        saved_actions[agent.__name__].append(*agent.saved_actions) # unwrapped saved actions
+                # initialize reward and actions containers according to agent class type
+                agent_names = []
+                for agent in self.agents: 
+                    if agent.__name__ not in agent_names:
+                        agent_names.append(agent.__name__)
+                for name in agent_names:
+                    saved_rewards.update({name:[]})  
+                    saved_actions.update({name:[]})   
+                # get rewards and saved actions from agents
 
+                for agent in self.agents: 
+                    saved_rewards[agent.__name__]= saved_rewards[agent.__name__]+ agent.saved_rewards
+                    saved_actions[agent.__name__]= saved_actions[agent.__name__]+ agent.saved_actions # unwrapped saved actions
                 
                 for agent_type, optimizer in self.optimizers.items(): # go through each policy and optimize it
                     agent_type_actions = saved_actions[agent_type]
                     agent_type_rewards = saved_rewards[agent_type]
-                    episode_reward.update({agent_type:np.sum(agent_type_rewards)}) #sum the rewards
                     # calculate loss
                     loss = self.calculate_loss(rewards = agent_type_rewards,
                                                saved_actions = agent_type_actions)
@@ -97,6 +98,8 @@ def t_env(settings=None):
                     optimizer.zero_grad()
                     loss.backward()
                     optimizer.step()
+                    episode_reward.update({agent_type:np.sum(agent_type_rewards)}) #sum the rewards
+
                 self.reset_t_env() # reset training environement
                 return episode_reward
             def reset_t_env(self):
