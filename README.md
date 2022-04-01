@@ -3,44 +3,8 @@
 
 # Neural-network policy trainer for agent-based modeling
 
+In agent-based modeling, devising a policy to correctly simulate agent's behavior can be challenging. Reinforcement learning is used to train such a policy based on the given data. foxyNN offers such a training procedure with minimal efforts from users. Further guideline will be provided in the future upon completion of this project. 
   
-
-This package ...
-
-- S
-
-  
-## Getting started
-
-### Quick start
-
-`pip install --upgrade ..`
-
-```py
-
-
-
-```
-
-```py
-
-
-
-```
-
-### More on it
-
-
-
-## Install
-
-Using pip manager:
-
--  `pip install --upgrade ...`
-
-Or, download the package and in the root folder, command:
-
--  `python3 setup.py install`
 
 ## Authors
 
